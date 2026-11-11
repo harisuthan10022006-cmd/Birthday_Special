@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Happy birthday!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;700&family=Kalam:wght@400;700&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#2a0f5c;--violet:#9b6bff;--orchid:#c9a7ff;--pink:#ff9ed2;--gold:#ffd86b;
+  --ui:"Quicksand","Trebuchet MS",sans-serif;--hand:"Kalam","Segoe Print",cursive;--disp:"Pacifico","Brush Script MT",cursive}
+*{box-sizing:border-box}
+body{margin:0;min-height:100svh;color:#fff;font-family:var(--ui);font-weight:500;font-size:1.05rem;line-height:1.55;
+  background:radial-gradient(circle at 12% 8%,rgba(180,130,255,.55),transparent 32%),radial-gradient(circle at 90% 35%,rgba(255,158,210,.28),transparent 30%),
+  linear-gradient(#2a0f5c,#5a2aa8 60%,#7a3fd1);background-attachment:fixed}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+[hidden]{display:none!important}
+h1,h2{font-family:var(--disp);font-weight:400;line-height:1.35;margin:0 0 .5rem}
+h1{font-size:clamp(1.6rem,6.4vw,2.5rem)}h2{font-size:clamp(1.4rem,5vw,2rem)}
+.btn{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);padding:.45rem 1.1rem;border-radius:2rem}
+
+/* ---------- PAGE 1: STEADY HANDS ---------- */
+#game{max-width:30rem;margin:0 auto;padding:1.2rem 1rem 2rem;text-align:center;transition:opacity .8s}
+#game.leaving{opacity:0}
+#game h1{color:var(--gold);text-shadow:0 3px 0 rgba(0,0,0,.25)}
+#game p{margin:.3rem 0}
+#board{display:block;width:100%;height:auto;max-height:68svh;margin:.6rem auto;border-radius:1.2rem;box-shadow:0 14px 34px rgba(0,0,0,.45);touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair}
+#msg{min-height:3rem;font-weight:700;color:var(--pink)}
+#flash{opacity:0;transition:opacity .5s;pointer-events:none}#flash.on{opacity:.55;transition:none}
+#flame{animation:flick .3s infinite alternate;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes flick{to{transform:scale(1.15,.9)}}
+.bit{position:fixed;top:-2rem;width:.7rem;height:1rem;border-radius:50% 0;z-index:9;pointer-events:none;animation:fall 3.6s ease-in forwards}
+@keyframes fall{to{transform:translate(var(--dx),110vh) rotate(720deg)}}
+
+/* ---------- PAGE 2: THE WARD ---------- */
+#card{position:relative;z-index:0;min-height:100svh;opacity:0;transition:opacity 1s}
+#card.in{opacity:1}
+#scene{position:fixed;inset:0;width:100%;height:100%;z-index:0;transition:filter 1.2s}
+#scene.dim{filter:blur(3px) brightness(.5)}
+.content{position:relative;z-index:1;width:100%;max-width:40rem;margin:0 auto;padding:2.2rem 1.1rem 3.5rem;text-align:center;pointer-events:none;display:flex;flex-direction:column;align-items:center}
+.content h1{color:#fff;text-shadow:0 2px 3px rgba(0,0,0,.5),0 4px 22px rgba(0,0,0,.7);text-wrap:balance;margin:0 0 1rem}
+.hint{display:inline-block;max-width:100%;background:rgba(14,22,28,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.18);padding:.5rem 1.2rem;border-radius:2rem;color:#fff;text-shadow:0 1px 4px #000;text-wrap:balance;margin:0}
+.note,.more,#wall{pointer-events:auto}
+.note{width:100%;background:radial-gradient(circle at 30% 10%,#fffaf0,#f6edd9 70%,#eadfc4);color:#2e2a45;border:1px solid rgba(120,90,40,.3);border-radius:.4rem;padding:2.2rem 1.8rem 1.8rem;text-align:center;
+  box-shadow:0 2px 0 rgba(255,255,255,.7) inset,0 22px 50px rgba(0,0,0,.6),0 3px 8px rgba(0,0,0,.35);margin:1.4rem 0 0}
+.note p{font-family:var(--hand);font-weight:400;font-size:clamp(1.15rem,4.2vw,1.4rem);line-height:1.6;color:#2e2a45;text-shadow:none;text-wrap:balance;
+  margin:0 0 1rem;opacity:0;transform:translateY(10px);transition:opacity 1s,transform 1s}
+.note p:first-child{font-weight:700;color:#6a3fc8;font-size:clamp(1.3rem,4.8vw,1.6rem)}
+.note p:last-child{margin-bottom:0;font-weight:700;color:#c2397f;font-size:clamp(1.3rem,4.8vw,1.6rem)}
+.note p.on{opacity:1;transform:none}
+.more{opacity:0;transition:opacity 1s;margin:1.5rem 0 0;color:#efe3ff;text-shadow:0 2px 10px #000}
+.more.on{opacity:.9}
+#wall{width:100%;margin-top:3rem;text-align:center;opacity:0;transition:opacity 1.5s}
+#wall.on{opacity:1}
+#wall h2,.sign{color:#fff;text-shadow:0 2px 3px rgba(0,0,0,.5),0 4px 18px rgba(0,0,0,.8);text-wrap:balance}
+.line{position:relative;display:flex;justify-content:center;flex-wrap:wrap;gap:1.2rem;padding:34px .4rem 1.5rem;margin-bottom:1rem}
+.line::before{content:"";position:absolute;top:0;left:1%;right:1%;height:16px;border-bottom:3px solid var(--orchid);border-radius:0 0 50% 50%/0 0 100% 100%}
+.ph{position:relative;margin:0;width:min(44%,11.5rem);background:#fff;padding:.55rem .55rem .3rem;border-radius:.4rem;
+  box-shadow:0 8px 18px rgba(0,0,0,.5);transform-origin:50% -26px;animation:sway 4.5s ease-in-out infinite alternate;animation-delay:var(--d,0s);transform:rotate(var(--r,0deg))}
+.ph:hover{animation-play-state:paused}
+.ph::before{content:"";position:absolute;top:-34px;left:calc(50% - .45rem);width:.9rem;height:2.1rem;background:var(--pink);border-radius:.3rem;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.ph img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:.25rem;background:linear-gradient(135deg,var(--orchid),var(--pink))}
+.ph figcaption{font-family:var(--hand);font-weight:700;font-size:1.05rem;line-height:1.25;color:#2a0f5c;text-align:center;padding:.35rem 0 .15rem}
+@keyframes sway{from{transform:rotate(calc(var(--r,0deg) - 2.5deg))}to{transform:rotate(calc(var(--r,0deg) + 2.5deg))}}
+.wishwrap{margin-top:2rem;display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.heart{width:84px;height:84px;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:rgba(14,22,28,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:grid;place-items:center;cursor:pointer;animation:beat 1.6s ease-in-out infinite;box-shadow:0 6px 24px rgba(0,0,0,.45),0 0 28px rgba(255,80,140,.35);transition:transform .2s}
+.heart svg{fill:#ff4f8b;filter:drop-shadow(0 2px 6px rgba(255,79,139,.7))}
+.heart:hover,.heart:focus-visible{transform:scale(1.1);outline:none}.heart.sent{animation:none}.heart.sent svg{fill:#ff2f78}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.12)}30%{transform:scale(1)}45%{transform:scale(1.08)}}
+.wishcap{margin:0;color:#fff;text-shadow:0 2px 3px rgba(0,0,0,.5),0 4px 14px rgba(0,0,0,.7);font-size:1rem}
+.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:1rem;background:rgba(8,12,16,.65);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+.modal[hidden]{display:none}
+.modal-card{position:relative;width:min(100%,26rem);background:radial-gradient(circle at 30% 10%,#fffaf0,#f6edd9 75%);color:#2e2a45;border-radius:1rem;padding:1.8rem 1.4rem 1.5rem;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.6)}
+.modal-card h3{font-family:var(--disp);font-size:1.7rem;margin:0 0 .4rem;color:#c2397f}
+.modal-card p{margin:0 0 1rem}
+.modal-card textarea{width:100%;box-sizing:border-box;font:inherit;font-size:16px;padding:.8rem;border:2px solid #d9c9a6;border-radius:.6rem;background:#fff;color:#2e2a45;resize:vertical;min-height:7rem}
+.modal-card textarea:focus{outline:none;border-color:#7a50d8}
+.modal-card button[type=submit],.modal-card .ok{margin-top:.9rem;font:inherit;font-weight:700;padding:.75rem 1.6rem;border:0;border-radius:2rem;background:linear-gradient(135deg,#ff5a9a,#8f5bff);color:#fff;cursor:pointer}
+.modal-card button:disabled{opacity:.6;cursor:wait}
+.modal-card .x{position:absolute;top:.4rem;right:.7rem;border:0;background:none;font-size:1.8rem;line-height:1;color:#7a6f8f;cursor:pointer}
+#wishMsg{margin:.8rem 0 0;font-size:.95rem;color:#b3261e;min-height:1.2em}
+.sign{font-family:var(--disp);font-size:1.6rem;margin-top:1rem}
+
+/* scene details */
+.letter{cursor:pointer;transition:opacity .8s}
+.letter.taken{opacity:0;pointer-events:none}
+.letter:hover .env,.letter:focus .env{filter:brightness(1.1)}
+.bob{animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.ring{fill:none;stroke:#ffd86b;stroke-width:2.5;transform-box:fill-box;transform-origin:center;animation:ring 1.9s ease-out infinite}
+@keyframes ring{0%{transform:scale(.6);opacity:.95}100%{transform:scale(1.6);opacity:0}}
+.ecg{stroke-dasharray:50;animation:ecg 2s linear infinite}
+@keyframes ecg{from{stroke-dashoffset:50}to{stroke-dashoffset:-50}}
+.scr{font-family:Orbitron,"Courier New",monospace}
+@media (prefers-reduced-motion:reduce){.ph,.bob,.ring,.ecg,.heart,#flame{animation:none}.bit{display:none}#card,#game,.note p,.more,#wall{transition:none}}
+</style>
+</head>
+<body>
+
+<!-- ============ PAGE 1: STEADY HANDS TEST ============ -->
+<main id="game">
+  <h1 id="gTitle"></h1>
+  <p>Surgeon’s steady-hands test: put your finger on the START marker, then guide the needle along the suture line to the birthday cake. Touch the edges and the patient complains.</p>
+  <svg id="board" viewBox="0 0 360 500" role="img" aria-label="Steady hands game board">
+    <defs>
+      <linearGradient id="drape" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f8f86"/><stop offset="1" stop-color="#1f6a67"/></linearGradient>
+      <pattern id="weave" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 0H5M0 2.5H5" stroke="rgba(255,255,255,.07)" stroke-width="1"/><path d="M0 0V5" stroke="rgba(0,0,0,.08)" stroke-width="1"/></pattern>
+      <radialGradient id="steel" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#b8c3c8"/><stop offset="1" stop-color="#6e7a80"/></radialGradient>
+      <linearGradient id="icing" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#f3c7e0"/></linearGradient>
+      <filter id="glow"><feGaussianBlur stdDeviation="2.5"/></filter>
+    </defs>
+    <rect width="360" height="500" fill="url(#drape)"/><rect width="360" height="500" fill="url(#weave)"/>
+    <rect x="8" y="8" width="344" height="484" rx="14" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <path id="lane" d="M60 60H290Q310 60 310 80V130Q310 150 290 150H80Q60 150 60 170V210Q60 230 80 230H290Q310 230 310 250V290Q310 310 290 310H80Q60 310 60 330V370Q60 390 80 390H290Q310 390 310 410V440"
+      fill="none" stroke="#09302e" stroke-width="54" stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#lane" stroke="#0f4a46" stroke-width="46"/>
+    <use href="#lane" stroke="#e5f6f3" stroke-width="2" stroke-dasharray="7 7" opacity=".85"/>
+    <polyline id="thread" fill="none" stroke="#c9a7ff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" points=""/>
+    <circle cx="60" cy="60" r="21" fill="#e5f6f3" opacity=".18"/><circle cx="60" cy="60" r="21" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <text x="60" y="30" fill="#fff" font-size="10" text-anchor="middle" font-family="Quicksand,sans-serif" font-weight="700">START</text>
+    <g id="cake">
+      <ellipse cx="312" cy="476" rx="34" ry="7" fill="#e9eef0"/>
+      <rect x="290" y="452" width="44" height="26" rx="6" fill="#f0b6d6"/>
+      <path d="M290 458Q296 468 302 458Q308 468 314 458Q320 468 326 458Q330 466 334 458V452H290Z" fill="url(#icing)"/>
+      <rect x="310" y="436" width="4" height="16" fill="#ffd86b"/>
+      <ellipse id="flame" cx="312" cy="430" rx="4" ry="7" fill="#ffb347"/>
+    </g>
+    <g id="needle" transform="translate(60 60)" style="pointer-events:none">
+      <circle r="13" fill="#fff" opacity=".18"/>
+      <circle r="7" fill="url(#steel)" stroke="#6e7a80" stroke-width=".8"/><ellipse rx="1.6" ry="2.6" fill="#243" transform="rotate(35)"/>
+    </g>
+    <rect id="flash" width="360" height="500" fill="#ff2d4d"/>
+  </svg>
+  <p id="msg" aria-live="polite">Ready when you are, doctor.</p>
+  <p>Attempts: <b id="att">0</b></p>
+  <button class="btn" id="skip" hidden>Skip the surgery</button>
+</main>
+
+<!-- ============ PAGE 2: THE WARD ============ -->
+<main id="card" hidden>
+  <svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-label="A hospital ward with a bed, a bedside table, a vitals monitor and a letter">
+    <defs>
+      <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3f5f1"/><stop offset="1" stop-color="#dae2dc"/></linearGradient>
+      <linearGradient id="lowG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b6d4cc"/><stop offset="1" stop-color="#86b0a7"/></linearGradient>
+      <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d2d6cf"/><stop offset=".5" stop-color="#b3b9b2"/><stop offset="1" stop-color="#848c85"/></linearGradient>
+      <linearGradient id="ceilG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef1ef"/><stop offset="1" stop-color="#d5dbd8"/></linearGradient>
+      <linearGradient id="floorExt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#848c85"/><stop offset="1" stop-color="#555c57"/></linearGradient>
+      <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8f9aa0"/><stop offset=".4" stop-color="#f2f5f6"/><stop offset="1" stop-color="#7f8a90"/></linearGradient>
+      <linearGradient id="steelV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3f6f7"/><stop offset="1" stop-color="#9aa6ac"/></linearGradient>
+      <linearGradient id="mat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7fafb"/><stop offset="1" stop-color="#bccacf"/></linearGradient>
+      <linearGradient id="blanket" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f68e6"/><stop offset="1" stop-color="#4a2a98"/></linearGradient>
+      <linearGradient id="fold" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".32"/></linearGradient>
+      <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dcc196"/><stop offset="1" stop-color="#b48a58"/></linearGradient>
+      <linearGradient id="woodTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4e3c2"/><stop offset="1" stop-color="#d8bd8f"/></linearGradient>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#69aee4"/><stop offset=".6" stop-color="#bfe2f6"/><stop offset="1" stop-color="#f6fbff"/></linearGradient>
+      <radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+      <linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7fafb"/><stop offset="1" stop-color="#bcc8cd"/></linearGradient>
+      <linearGradient id="scr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#02100f"/><stop offset="1" stop-color="#062a2c"/></linearGradient>
+      <linearGradient id="cone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <linearGradient id="scrim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a1418" stop-opacity=".55"/><stop offset="1" stop-color="#0a1418" stop-opacity="0"/></linearGradient>
+      <radialGradient id="pil" cx=".4" cy=".3" r=".8"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#cfd9de"/></radialGradient>
+      <radialGradient id="vig" cx=".5" cy=".55" r=".78"><stop offset=".5" stop-color="#0a1418" stop-opacity="0"/><stop offset="1" stop-color="#0a1418" stop-opacity=".7"/></radialGradient>
+      <radialGradient id="wax" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#e45a99"/><stop offset="1" stop-color="#8c1b52"/></radialGradient>
+      <pattern id="slats" width="10" height="9" patternUnits="userSpaceOnUse"><rect width="10" height="6" fill="#f6f7f5"/><rect y="6" width="10" height="3" fill="rgba(0,0,0,.3)"/></pattern>
+      <filter id="b3"><feGaussianBlur stdDeviation="3"/></filter>
+      <filter id="b8"><feGaussianBlur stdDeviation="8"/></filter>
+      <filter id="b18"><feGaussianBlur stdDeviation="18"/></filter>
+      <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .6 -.2"/></filter>
+      <filter id="wg" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".012 .3" numOctaves="3" seed="2"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .2  0 0 0 0 .08  0 0 0 1.2 -.4"/></filter>
+      <clipPath id="win"><rect x="1130" y="120" width="360" height="300"/></clipPath>
+      <clipPath id="flr"><rect y="622" width="1600" height="278"/></clipPath>
+    </defs>
+
+    <!-- room shell -->
+    <rect x="-200" y="-500" width="2000" height="502" fill="#eef1ef"/><rect x="-200" y="895" width="2000" height="620" fill="url(#floorExt)"/><rect x="-200" y="-500" width="2000" height="502" filter="url(#grain)" opacity=".5"/>
+    <rect width="1600" height="640" fill="url(#wallG)"/>
+    <rect y="436" width="1600" height="190" fill="url(#lowG)"/>
+    <rect width="1600" height="640" filter="url(#grain)" opacity=".5"/>
+    <rect width="1600" height="66" fill="url(#ceilG)"/><rect y="64" width="1600" height="8" fill="rgba(0,0,0,.18)" filter="url(#b3)"/>
+    <path d="M200 0V64M420 0V64M1180 0V64M1400 0V64" stroke="rgba(0,0,0,.1)" stroke-width="2"/>
+    <rect y="424" width="1600" height="14" fill="#f2f4f1"/><rect y="424" width="1600" height="3" fill="#fff" opacity=".85"/><rect y="438" width="1600" height="9" fill="rgba(0,0,0,.2)" filter="url(#b3)"/>
+    <rect y="622" width="1600" height="278" fill="url(#floorG)"/><rect y="622" width="1600" height="278" filter="url(#grain)" opacity=".7"/>
+    <path d="M300 640L-200 900M560 640L320 900M800 640V900M1040 640L1280 900M1300 640L1800 900M0 700H1600M0 770H1600M0 850H1600" stroke="rgba(0,0,0,.09)" stroke-width="2" fill="none"/>
+    <rect y="596" width="1600" height="26" fill="#e9eeea"/><rect y="596" width="1600" height="3" fill="#fff" opacity=".8"/><rect y="619" width="1600" height="9" fill="rgba(0,0,0,.3)" filter="url(#b3)"/>
+
+    <!-- light: ceiling panel, cone, window glow -->
+    <rect x="470" y="14" width="660" height="34" rx="5" fill="#fff" filter="url(#b8)"/><rect x="482" y="20" width="636" height="20" rx="4" fill="#fff"/>
+    <polygon points="482,42 1118,42 1560,640 40,640" fill="url(#cone)" opacity=".7"/>
+    <ellipse cx="1150" cy="320" rx="340" ry="270" fill="#fff6dd" opacity=".4" filter="url(#b18)"/>
+    <g clip-path="url(#flr)" fill="#fff4d2" opacity=".3" filter="url(#b3)">
+      <polygon points="1150,454 1188,454 590,900 512,900"/><polygon points="1222,454 1260,454 662,900 584,900"/><polygon points="1294,454 1332,454 734,900 656,900"/><polygon points="1366,454 1404,454 806,900 728,900"/><polygon points="1438,454 1476,454 878,900 800,900"/>
+    </g>
+    <polygon points="1130,454 1490,454 1250,900 560,900" fill="#fff6dc" opacity=".16" filter="url(#b18)"/>
+
+    <!-- window -->
+    <rect x="1102" y="96" width="416" height="356" rx="3" fill="#000" opacity=".22" filter="url(#b8)"/>
+    <rect x="1108" y="98" width="404" height="344" fill="#f2f5f3" stroke="#bec8c3" stroke-width="3"/>
+    <g clip-path="url(#win)">
+      <rect x="1130" y="120" width="360" height="300" fill="url(#sky)"/>
+      <circle cx="1440" cy="170" r="100" fill="url(#sun)"/>
+      <g filter="url(#b3)" opacity=".75"><rect x="1140" y="340" width="40" height="80" fill="#93acbb"/><rect x="1190" y="310" width="58" height="110" fill="#a3b9c5"/><rect x="1262" y="350" width="46" height="70" fill="#93acbb"/><rect x="1330" y="330" width="60" height="90" fill="#9fb6c3"/><rect x="1402" y="300" width="52" height="120" fill="#8ea8b7"/></g>
+      <ellipse cx="1150" cy="418" rx="90" ry="38" fill="#5f8f62" filter="url(#b8)"/><ellipse cx="1440" cy="422" rx="80" ry="30" fill="#6b9a6a" filter="url(#b8)"/>
+      <g fill="#fff" opacity=".85" filter="url(#b8)"><ellipse cx="1250" cy="240" rx="70" ry="16"/><ellipse cx="1380" cy="280" rx="80" ry="15"/></g>
+      <rect x="1130" y="120" width="360" height="86" fill="url(#slats)"/><rect x="1130" y="204" width="360" height="8" fill="#e7ebe9"/><rect x="1130" y="211" width="360" height="4" fill="rgba(0,0,0,.18)" filter="url(#b3)"/>
+      <path d="M1196 120V206M1424 120V206" stroke="#cdd4d1" stroke-width="2"/>
+      <polygon points="1130,120 1260,120 1130,310" fill="#fff" opacity=".13"/>
+    </g>
+    <rect x="1308" y="120" width="6" height="300" fill="#eef1ef"/><rect x="1130" y="268" width="360" height="6" fill="#eef1ef"/>
+    <rect x="1090" y="438" width="440" height="16" rx="3" fill="#f4f6f4"/><rect x="1090" y="438" width="440" height="3" fill="#fff"/><rect x="1096" y="454" width="428" height="10" fill="rgba(0,0,0,.18)" filter="url(#b3)"/>
+
+    <!-- wall details -->
+    <g id="art">
+      <defs><linearGradient id="artSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a4fb4"/><stop offset=".55" stop-color="#e98ab4"/><stop offset="1" stop-color="#ffd195"/></linearGradient>
+      <clipPath id="artClip"><rect x="362" y="122" width="196" height="106"/></clipPath></defs>
+      <rect x="347" y="109" width="240" height="150" rx="3" fill="#000" opacity=".32" filter="url(#b3)"/>
+      <rect x="340" y="100" width="240" height="150" rx="3" fill="#7a4d24"/><rect x="342" y="102" width="236" height="146" rx="2" fill="none" stroke="#d3a566" stroke-width="2.5"/>
+      <rect x="352" y="112" width="216" height="126" fill="#f8f2e5"/><rect x="352" y="112" width="216" height="126" fill="none" stroke="rgba(0,0,0,.15)"/>
+      <g clip-path="url(#artClip)">
+        <rect x="362" y="122" width="196" height="106" fill="url(#artSky)"/>
+        <circle cx="498" cy="170" r="40" fill="#fff2c4" opacity=".4" filter="url(#b8)"/><circle cx="498" cy="170" r="19" fill="#fff0b8"/>
+        <path d="M362 192Q398 160 440 184T520 176T558 188V228H362Z" fill="#b48fd6"/>
+        <path d="M362 206Q410 178 462 200T558 196V228H362Z" fill="#7d6bc0"/>
+        <path d="M362 218Q420 200 470 214T558 210V228H362Z" fill="#4c4a9a"/>
+        <path d="M392 222V196" stroke="#3b2f6e" stroke-width="3"/><circle cx="392" cy="190" r="12" fill="#ff9ec8"/><circle cx="382" cy="196" r="8" fill="#ffb6d6"/><circle cx="402" cy="197" r="8" fill="#ff8bbd"/>
+        <path d="M410 142q5-6 10 0q5-6 10 0M438 130q4-5 8 0q4-5 8 0" stroke="#4b3070" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <polygon points="362,122 440,122 362,196" fill="#fff" opacity=".13"/>
+      </g>
+      <rect x="362" y="122" width="196" height="106" fill="none" stroke="rgba(0,0,0,.28)" stroke-width="1.5"/>
+    </g>
+
+    <circle cx="866" cy="160" r="52" fill="#000" opacity=".28" filter="url(#b3)"/>
+    <circle cx="860" cy="150" r="52" fill="#2a3035"/><circle cx="860" cy="150" r="46" fill="#fbfbf9"/>
+    <g id="clk"></g>
+    <path d="M822 126A46 46 0 0 1 884 112" stroke="#fff" stroke-width="6" fill="none" opacity=".45" stroke-linecap="round"/>
+
+    <g id="gasPanel" transform="translate(525 0)">
+    <rect x="96" y="304" width="250" height="78" rx="8" fill="#000" opacity=".22" filter="url(#b3)"/>
+    <rect x="90" y="296" width="250" height="78" rx="8" fill="#e3e9e7" stroke="#b8c4c1" stroke-width="2"/><rect x="100" y="304" width="230" height="8" rx="4" fill="#fff" opacity=".9"/>
+    <g stroke="#6d777a" stroke-width="2"><circle cx="140" cy="342" r="14" fill="#f4f6f6"/><circle cx="190" cy="342" r="14" fill="#f2d65c"/><circle cx="240" cy="342" r="14" fill="#6fbf8c"/><circle cx="290" cy="342" r="14" fill="#7aa6d6"/></g>
+    <g font-family="Orbitron,sans-serif" font-size="9" fill="#555" text-anchor="middle"><text x="140" y="368">O2</text><text x="190" y="368">AIR</text><text x="240" y="368">VAC</text><text x="290" y="368">N2O</text></g>
+    <path d="M318 374C322 392 316 406 322 420" stroke="#7d888e" stroke-width="2.5" fill="none"/><circle cx="322" cy="432" r="13" fill="#d8323f" stroke="#8c1a24" stroke-width="2"/>
+    </g>
+    <rect x="1042" y="302" width="42" height="76" rx="8" fill="#000" opacity=".22" filter="url(#b3)"/>
+    <rect x="1036" y="296" width="42" height="76" rx="8" fill="#fff" stroke="#c5cfcc" stroke-width="2"/><rect x="1044" y="283" width="26" height="14" rx="4" fill="#9cb0ba"/><rect x="1049" y="334" width="16" height="22" rx="3" fill="#7fb7d9"/>
+
+    <g transform="translate(500 100) scale(.8)">
+    <!-- IV stand -->
+    <ellipse cx="62" cy="806" rx="52" ry="9" fill="#000" opacity=".4" filter="url(#b3)"/>
+    <path d="M62 250V800" stroke="#aeb9bf" stroke-width="7"/><path d="M60 252V798" stroke="#fff" stroke-width="2" opacity=".7"/><path d="M65 252V798" stroke="#000" stroke-width="1.5" opacity=".2"/><path d="M22 800H102" stroke="#7f8a90" stroke-width="7" stroke-linecap="round"/><circle cx="24" cy="806" r="5" fill="#2f353a"/><circle cx="100" cy="806" r="5" fill="#2f353a"/>
+    <path d="M30 252H94" stroke="#9aa5ab" stroke-width="5" stroke-linecap="round"/>
+    <rect x="30" y="256" width="38" height="86" rx="8" fill="rgba(225,242,252,.8)" stroke="#9db6c4" stroke-width="2"/><rect x="33" y="300" width="32" height="39" rx="6" fill="rgba(255,245,200,.7)"/><path d="M36 262V300" stroke="#fff" stroke-width="3" opacity=".6" stroke-linecap="round"/>
+    <path d="M49 250V256" stroke="#9aa5ab" stroke-width="2"/><rect x="45" y="342" width="8" height="5" fill="#9fb2bc"/><rect x="42" y="347" width="14" height="22" rx="4" fill="rgba(225,242,252,.9)" stroke="#9db6c4" stroke-width="1.5"/><circle cx="49" cy="353" r="1.6" fill="#7fb7d9"/><rect x="46" y="369" width="6" height="4" fill="#9fb2bc"/>
+    </g>
+
+    <g id="nurse" transform="translate(350 315)">
+      <defs><linearGradient id="scrubG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6cc6da"/><stop offset=".55" stop-color="#4fb3c9"/><stop offset="1" stop-color="#3a95ad"/></linearGradient>
+      <linearGradient id="pantsG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4aa3bb"/><stop offset="1" stop-color="#337a90"/></linearGradient></defs>
+      <ellipse cx="100" cy="433" rx="64" ry="8" fill="#000" opacity=".4" filter="url(#b3)"/>
+      <path d="M66 232H98L97 418H70Z" fill="url(#pantsG)"/><path d="M102 232H134L130 418H103Z" fill="url(#pantsG)"/>
+      <path d="M64 418H98V428Q98 434 90 434H66Q60 434 60 428Z" fill="#f4f6f7" stroke="#cfd6d9"/><path d="M102 418H136V428Q136 434 130 434H110Q102 434 102 428Z" fill="#f4f6f7" stroke="#cfd6d9"/>
+      <ellipse cx="100" cy="42" rx="34" ry="34" fill="#5a3a28"/>
+      <rect x="91" y="66" width="18" height="16" fill="#e8b78f"/>
+      <path d="M58 92Q70 80 90 78H110Q130 80 142 92L148 238Q100 250 52 238Z" fill="url(#scrubG)"/>
+      <path d="M88 79L100 104L112 79Z" fill="#f2c6a0"/><path d="M86 78L100 108L114 78" stroke="#fff" stroke-width="3" fill="none" opacity=".85"/>
+      <path d="M54 232Q100 244 150 232V242Q100 254 52 242Z" fill="#2f7f96"/>
+      <path d="M88 80C80 112 94 122 100 120C106 122 120 112 112 80" stroke="#3a3f46" stroke-width="3" fill="none"/>
+      <path d="M62 94L44 150" stroke="#4fb3c9" stroke-width="22" stroke-linecap="round"/><path d="M44 150L32 196" stroke="#f2c6a0" stroke-width="16" stroke-linecap="round"/>
+      <path d="M138 94L156 150" stroke="#4fb3c9" stroke-width="22" stroke-linecap="round"/><path d="M156 150L168 196" stroke="#f2c6a0" stroke-width="16" stroke-linecap="round"/>
+      <circle cx="100" cy="42" r="28" fill="#f4c9a5"/>
+      <path d="M72 38Q74 14 100 13Q126 14 128 38Q116 24 100 25Q84 24 72 38Z" fill="#5a3a28"/>
+      <path d="M76 20Q78 4 100 3Q122 4 124 20Q100 14 76 20Z" fill="#fff" stroke="#d3dadd"/><path d="M100 6V15M95.5 10.5H104.5" stroke="#d8323f" stroke-width="3"/>
+      <ellipse cx="90" cy="44" rx="2.4" ry="3" fill="#2a2330"/><ellipse cx="110" cy="44" rx="2.4" ry="3" fill="#2a2330"/>
+      <path d="M85 37Q90 34 95 37M105 37Q110 34 115 37" stroke="#4a3022" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <path d="M91 54Q100 62 109 54" stroke="#b0493d" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <circle cx="81" cy="52" r="5" fill="#f29a92" opacity=".45"/><circle cx="119" cy="52" r="5" fill="#f29a92" opacity=".45"/>
+      <rect x="26" y="124" width="160" height="112" rx="6" fill="#000" opacity=".3" filter="url(#b3)"/>
+      <rect x="20" y="112" width="160" height="112" rx="6" fill="#fffdf6" stroke="#b98a52" stroke-width="5"/>
+      <g opacity=".9"><circle cx="34" cy="126" r="3.5" fill="#ffd86b"/><circle cx="166" cy="126" r="3.5" fill="#ff9ed2"/><circle cx="34" cy="210" r="3.5" fill="#9b6bff"/><circle cx="166" cy="210" r="3.5" fill="#6fd3ff"/></g>
+      <text x="100" y="146" text-anchor="middle" font-family="Pacifico,'Brush Script MT',cursive" font-size="17" fill="#d1478a">Happy Birthday</text>
+      <text id="nurseName" x="100" y="187" text-anchor="middle" font-family="Pacifico,'Brush Script MT',cursive" font-size="22" fill="#6a3fc8"></text>
+      <path d="M58 198Q79 205 100 198T142 198" stroke="#ffd86b" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      <circle cx="30" cy="198" r="9" fill="#f2c6a0"/><circle cx="170" cy="198" r="9" fill="#f2c6a0"/>
+    </g>
+
+    <g id="tableGroup" transform="translate(502 139) scale(.6)">
+    <!-- bedside table -->
+    <ellipse cx="800" cy="818" rx="220" ry="18" fill="#000" opacity=".5" filter="url(#b8)"/><ellipse cx="800" cy="846" rx="170" ry="9" fill="#fff" opacity=".18" filter="url(#b8)"/>
+    <rect x="640" y="764" width="14" height="34" fill="#8f979b"/><rect x="946" y="764" width="14" height="34" fill="#8f979b"/>
+    <circle cx="647" cy="806" r="11" fill="#2f353a"/><circle cx="953" cy="806" r="11" fill="#2f353a"/>
+    <rect x="632" y="590" width="336" height="178" rx="6" fill="url(#wood)" stroke="rgba(80,50,20,.4)" stroke-width="2"/>
+    <rect x="632" y="590" width="336" height="178" rx="6" filter="url(#wg)" opacity=".6" style="mix-blend-mode:multiply"/>
+    <rect x="646" y="602" width="308" height="62" rx="5" fill="#d1b284" fill-opacity=".55" stroke="rgba(80,50,20,.35)"/><rect x="760" y="626" width="80" height="9" rx="4" fill="url(#steel)"/>
+    <rect x="646" y="676" width="308" height="82" rx="5" fill="#d1b284" fill-opacity=".55" stroke="rgba(80,50,20,.35)"/><rect x="760" y="700" width="80" height="9" rx="4" fill="url(#steel)"/>
+    <path d="M660 616H940M660 690H940" stroke="rgba(255,255,255,.3)" stroke-width="2"/>
+    <rect x="614" y="568" width="372" height="22" rx="3" fill="url(#wood)"/><path d="M618 572H982" stroke="rgba(255,255,255,.55)" stroke-width="2"/><rect x="614" y="588" width="372" height="8" fill="rgba(0,0,0,.28)" filter="url(#b3)"/>
+    <path d="M632 538H968L986 568H614Z" fill="url(#woodTop)"/><path d="M632 538H968L986 568H614Z" filter="url(#wg)" opacity=".35" style="mix-blend-mode:multiply"/><path d="M700 545H900" stroke="#fff" stroke-width="6" opacity=".35" filter="url(#b3)"/>
+
+    <!-- table items: jug, glass, pill bottle -->
+    <ellipse cx="682" cy="558" rx="42" ry="6" fill="#000" opacity=".3" filter="url(#b3)"/>
+    <rect x="648" y="498" width="42" height="58" rx="9" fill="rgba(195,228,246,.55)" stroke="rgba(110,150,175,.85)" stroke-width="2"/>
+    <rect x="650" y="520" width="38" height="34" rx="7" fill="rgba(140,200,235,.55)"/><rect x="646" y="490" width="46" height="10" rx="4" fill="#4a90c2"/><path d="M654 506V548" stroke="#fff" stroke-width="3" opacity=".6" stroke-linecap="round"/>
+    <path d="M690 510C706 510 706 536 690 536" stroke="rgba(110,150,175,.85)" stroke-width="3" fill="none"/>
+    <rect x="700" y="522" width="26" height="36" rx="4" fill="rgba(210,238,250,.6)" stroke="rgba(110,150,175,.85)" stroke-width="2"/><rect x="702" y="538" width="22" height="18" rx="3" fill="rgba(140,200,235,.55)"/>
+    <rect x="732" y="516" width="24" height="42" rx="4" fill="#e29a2f"/><rect x="730" y="508" width="28" height="10" rx="3" fill="#fff"/><rect x="734" y="528" width="20" height="18" fill="#fff"/><path d="M737 534H751M737 539H748" stroke="#999" stroke-width="1.5"/>
+
+    <!-- vitals monitor -->
+    <ellipse cx="836" cy="564" rx="76" ry="7" fill="#000" opacity=".35" filter="url(#b3)"/>
+    <rect x="809" y="416" width="54" height="14" rx="7" fill="#bcc6cb"/>
+    <rect x="768" y="428" width="136" height="132" rx="12" fill="url(#body)" stroke="#a6b1b6" stroke-width="2"/>
+    <text id="mname" x="836" y="435" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="5.5" fill="#56656e"></text>
+    <rect x="778" y="438" width="116" height="84" rx="7" fill="#0f171a"/>
+    <rect x="782" y="442" width="108" height="76" rx="4" fill="url(#scr)"/>
+    <g class="scr">
+      <text x="788" y="452" font-size="6" fill="#b9c7cc">NIBP mmHg</text>
+      <text x="884" y="452" font-size="6" fill="#b9c7cc" text-anchor="end">MAP (<tspan id="map">93</tspan>)</text>
+      <text x="884" y="468" font-size="16" fill="#ff7a9c" text-anchor="end"><tspan id="sys">120</tspan><tspan fill="#ff9fb4">/</tspan><tspan id="dia">80</tspan></text>
+      <path d="M782 472H890M782 497H890" stroke="rgba(185,199,204,.22)" stroke-width=".8"/>
+      <text x="788" y="481" font-size="6" fill="#3dff9e">PULSE bpm</text>
+      <text id="pul" x="884" y="492" font-size="13" fill="#3dff9e" text-anchor="end">72</text>
+      <text x="788" y="506" font-size="6" fill="#4fd8ff">SpO2 %</text>
+      <text x="884" y="515" font-size="13" fill="#4fd8ff" text-anchor="end">98</text>
+    </g>
+    <path class="ecg" d="M788 490H798L801 483L805 496L808 488H826" stroke="#3dff9e" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="770" y="430" width="132" height="92" fill="#4fd8ff" opacity=".12" filter="url(#b8)"/>
+    <polygon points="782,442 836,442 800,518 782,518" fill="#fff" opacity=".07"/>
+    <circle cx="790" cy="541" r="5.5" fill="#7a50d8"/><circle cx="807" cy="541" r="4.5" fill="#9aa6ab"/><circle cx="823" cy="541" r="4.5" fill="#9aa6ab"/>
+    <text x="892" y="543.5" text-anchor="end" font-family="Orbitron,sans-serif" font-size="7" fill="#6b777c">VITALS 300</text>
+    <rect x="781" y="553" width="110" height="5" rx="2" fill="#aab4b9"/>
+    <path d="M770 560C790 560 790 534 770 528" stroke="#2c3338" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <rect x="690" y="548" width="88" height="17" rx="8" fill="#5f7f93"/><rect x="694" y="551" width="30" height="11" rx="5" fill="#7d9bad"/><path d="M730 550V563" stroke="rgba(0,0,0,.25)" stroke-width="2"/>
+    <g fill="none" stroke="#2a2a33" stroke-width="3.2" stroke-linecap="round"><ellipse cx="836" cy="566" rx="36" ry="5.5"/><path d="M800 566C796 556 806 552 818 556M872 566C878 560 884 560 888 564"/></g>
+    <circle cx="890" cy="565" r="8" fill="url(#steel)" stroke="#6e7a80"/><circle cx="890" cy="565" r="4" fill="#cfd8dc"/>
+
+    <!-- the letter -->
+    <g id="letter" class="letter" tabindex="0" role="button" aria-label="Open the letter">
+      <circle class="ring" cx="946" cy="532" r="44"/>
+      <g class="bob">
+        <ellipse cx="946" cy="560" rx="40" ry="4" fill="rgba(0,0,0,.35)" filter="url(#b3)"/>
+        <g class="env" transform="rotate(-7 946 556)">
+          <rect x="910" y="506" width="74" height="50" rx="3" fill="#fbf3e4" stroke="#d3c3a1" stroke-width="1.5"/>
+          <path d="M910 508L947 536L984 508" fill="#f3e8d2" stroke="#d3c3a1" stroke-width="1.5"/>
+          <text x="947" y="552" text-anchor="middle" font-family="Kalam,cursive" font-size="11" fill="#7a50d8">for you</text>
+          <circle cx="947" cy="536" r="9" fill="url(#wax)"/><path d="M942 533C944 530 949 530 952 533" stroke="rgba(255,255,255,.55)" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        </g>
+      </g>
+      <circle cx="946" cy="532" r="72" fill="transparent"/><rect x="896" y="490" width="102" height="80" fill="transparent"/>
+    </g>
+    </g>
+
+    <!-- bed (3D, one-point perspective) -->
+      <g id="bed3d">
+      <polygon points="645.0,620.0 853.8,620.0 1046.5,816.3 656.6,816.3" fill="#000" opacity=".5" filter="url(#b8)"/>
+      <polygon points="676.6,631.2 835.0,631.2 977.4,808.5 717.6,808.5" fill="#000" opacity=".35" filter="url(#b3)"/>
+      <rect x="699.0" y="609.3" width="10.8" height="10.8" fill="#8f9aa0"/><circle cx="704.4" cy="631.0" r="13.6" fill="#22272c"/><circle cx="704.4" cy="631.0" r="5.7" fill="#aab4ba"/><path d="M694.9 625.6A10.8 10.8 0 0 1 707.1 620.1" stroke="#fff" stroke-width="1.2" fill="none" opacity=".35"/>
+      <rect x="815.6" y="609.3" width="10.8" height="10.8" fill="#8f9aa0"/><circle cx="821.0" cy="631.0" r="13.6" fill="#22272c"/><circle cx="821.0" cy="631.0" r="5.7" fill="#aab4ba"/><path d="M811.5 625.6A10.8 10.8 0 0 1 823.7 620.1" stroke="#fff" stroke-width="1.2" fill="none" opacity=".35"/>
+      <polygon points="688.6,628.8 734.0,782.0 734.0,754.0 688.6,610.3" fill="#131a24" stroke="#131a24" stroke-width="3" stroke-linejoin="round"/>
+      <polygon points="688.6,610.3 828.7,610.3 946.0,754.0 734.0,754.0" fill="#2b384a" stroke="#2b384a" stroke-width="3" stroke-linejoin="round"/>
+      <polygon points="734.0,782.0 946.0,782.0 946.0,754.0 734.0,754.0" fill="#1c2634" stroke="#1c2634" stroke-width="3" stroke-linejoin="round"/>
+      <line x1="742.0" y1="756.0" x2="938.0" y2="756.0" stroke="#7b93b1" stroke-width="1.4" stroke-linecap="round" opacity="0.8"/>
+      <rect x="743.2" y="734.1" width="15.7" height="15.7" fill="#8f9aa0"/><circle cx="751.0" cy="765.5" r="19.6" fill="#22272c"/><circle cx="751.0" cy="765.5" r="8.2" fill="#aab4ba"/><path d="M737.3 757.6A15.7 15.7 0 0 1 755.0 749.8" stroke="#fff" stroke-width="1.2" fill="none" opacity=".35"/>
+      <rect x="911.9" y="734.1" width="15.7" height="15.7" fill="#8f9aa0"/><circle cx="919.7" cy="765.5" r="19.6" fill="#22272c"/><circle cx="919.7" cy="765.5" r="8.2" fill="#aab4ba"/><path d="M906.0 757.6A15.7 15.7 0 0 1 923.7 749.8" stroke="#fff" stroke-width="1.2" fill="none" opacity=".35"/>
+      <polygon points="778.3,696.9 837.1,696.9 837.1,672.7 778.3,672.7" fill="#aab5bb" stroke="#aab5bb" stroke-width="2" stroke-linejoin="round"/>
+      <polygon points="765.9,671.4 778.3,696.9 778.3,672.7 765.9,648.9" fill="#8d989e" stroke="#8d989e" stroke-width="2" stroke-linejoin="round"/>
+      <polygon points="675.9,580.4 723.8,738.4 723.8,713.6 675.9,565.2" fill="#9aa6ac" stroke="#9aa6ac" stroke-width="2" stroke-linejoin="round"/>
+      <polygon points="723.8,738.4 971.2,738.4 971.2,713.6 723.8,713.6" fill="#bec8cd" stroke="#bec8cd" stroke-width="2" stroke-linejoin="round"/>
+      <polygon points="675.9,565.2 827.6,565.2 971.2,713.6 723.8,713.6" fill="#d9e1e5" stroke="#d9e1e5" stroke-width="2" stroke-linejoin="round"/>
+      <line x1="675.9" y1="566.4" x2="723.8" y2="715.7" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity="0.8"/>
+      <polygon points="674.5,584.2 833.6,584.2 833.6,448.1 674.5,448.1" fill="#e7edef" stroke="#e7edef" stroke-width="4" stroke-linejoin="round"/>
+      <polygon points="673.3,446.3 830.1,446.3 833.6,448.1 674.5,448.1" fill="#fbfdfd" stroke="#fbfdfd" stroke-width="3" stroke-linejoin="round"/>
+      <polygon points="673.3,580.4 674.5,584.2 674.5,448.1 673.3,446.3" fill="#c3ced3" stroke="#c3ced3" stroke-width="2" stroke-linejoin="round"/>
+      <polygon points="689.9,563.6 818.2,563.6 818.2,466.1 689.9,466.1" fill="#d9e2e6" opacity=".8"/>
+      <polygon points="679.3,567.9 727.3,711.8 727.3,633.8 679.3,519.3" fill="#cfd9de" stroke="#cfd9de" stroke-width="8" stroke-linejoin="round"/>
+      <polygon points="727.3,711.8 965.4,711.8 965.4,633.8 727.3,633.8" fill="#e5ecef" stroke="#e5ecef" stroke-width="8" stroke-linejoin="round"/>
+      <polygon points="679.3,519.3 827.6,519.3 965.4,633.8 727.3,633.8" fill="#fbfdfe" stroke="#fbfdfe" stroke-width="8" stroke-linejoin="round"/>
+      <line x1="679.3" y1="519.9" x2="727.3" y2="634.9" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/>
+      <line x1="727.3" y1="634.9" x2="965.4" y2="634.9" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity="0.9"/>
+      <line x1="727.3" y1="670.8" x2="965.4" y2="670.8" stroke="#c4d0d6" stroke-width="1.2" stroke-linecap="round" opacity="0.8"/>
+      <polygon points="680.2,570.5 680.2,461.9 695.4,557.7 695.4,616.2" fill="#c9d4da" stroke="#c9d4da" stroke-width="8" stroke-linejoin="round"/>
+      <polygon points="680.2,461.9 830.2,461.9 873.8,557.7 695.4,557.7" fill="#ffffff" stroke="#ffffff" stroke-width="8" stroke-linejoin="round"/>
+      <line x1="680.2" y1="461.9" x2="695.4" y2="557.7" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity="0.9"/>
+      <line x1="695.4" y1="557.7" x2="873.8" y2="557.7" stroke="#dbe4e8" stroke-width="1.4" stroke-linecap="round" opacity="0.9"/>
+      <polygon points="707.1,470.7 818.1,470.7 838.8,517.9 717.2,517.9" fill="#000" opacity=".18" filter="url(#b3)"/>
+      <polygon points="703.3,455.2 810.5,455.2 830.7,500.7 713.2,500.7" fill="#f4f8fa" stroke="#f4f8fa" stroke-width="14" stroke-linejoin="round"/>
+      <polygon points="723.4,460.5 797.7,460.5 805.0,484.7 732.5,484.7" fill="#fff" opacity=".7" filter="url(#b3)"/>
+      <line x1="713.7" y1="477.2" x2="815.1" y2="477.2" stroke="#b9c6cd" stroke-width="1.4" stroke-linecap="round" opacity="0.6"/>
+      <line x1="726.2" y1="495.2" x2="817.0" y2="495.2" stroke="#b9c6cd" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+      <polygon points="701.1,587.9 715.2,623.9 715.2,594.1 701.1,561.8" fill="#4a2a98" stroke="#4a2a98" stroke-width="5" stroke-linejoin="round"/>
+      <polygon points="715.2,623.9 961.4,623.9 961.4,594.1 715.2,594.1" fill="#6a45c4" stroke="#6a45c4" stroke-width="5" stroke-linejoin="round"/>
+      <polygon points="701.1,561.8 917.2,561.8 961.4,594.1 715.2,594.1" fill="#8661e0" stroke="#8661e0" stroke-width="5" stroke-linejoin="round"/>
+      <polygon points="701.1,561.8 917.2,561.8 961.4,594.1 715.2,594.1" fill="url(#fold)" />
+      <line x1="706.0" y1="573.0" x2="932.5" y2="573.0" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity="0.28"/>
+      <line x1="710.4" y1="583.2" x2="946.5" y2="583.2" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity="0.28"/>
+      <line x1="715.2" y1="596.1" x2="961.4" y2="596.1" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity="0.35"/>
+      <polygon points="718.5,734.6 719.6,738.4 719.6,602.2 718.5,599.7" fill="#c3ced3" stroke="#c3ced3" stroke-width="2" stroke-linejoin="round"/>
+      <polygon points="719.6,738.4 975.4,738.4 975.4,602.2 719.6,602.2" fill="#eef3f5" stroke="#eef3f5" stroke-width="4" stroke-linejoin="round"/>
+      <polygon points="718.5,599.7 971.9,599.7 975.4,602.2 719.6,602.2" fill="#ffffff" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+      <polygon points="744.4,709.5 950.6,709.5 950.6,627.0 744.4,627.0" fill="#d9e2e6" opacity=".8"/>
+      <line x1="687.3" y1="593.4" x2="687.3" y2="491.8" stroke="#aab6bd" stroke-width="6.3" stroke-linecap="round" opacity="1"/>
+      <line x1="687.3" y1="593.4" x2="687.3" y2="491.8" stroke="#fff" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+      <line x1="697.2" y1="623.3" x2="697.2" y2="510.2" stroke="#aab6bd" stroke-width="7.1" stroke-linecap="round" opacity="1"/>
+      <line x1="697.2" y1="623.3" x2="697.2" y2="510.2" stroke="#fff" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+      <line x1="708.4" y1="657.2" x2="708.4" y2="531.1" stroke="#aab6bd" stroke-width="7.9" stroke-linecap="round" opacity="1"/>
+      <line x1="708.4" y1="657.2" x2="708.4" y2="531.1" stroke="#fff" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+      <line x1="687.3" y1="491.8" x2="708.4" y2="531.1" stroke="#aab6bd" stroke-width="8.0" stroke-linecap="round" opacity="1"/>
+      <line x1="687.3" y1="490.2" x2="708.4" y2="529.1" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity="0.6"/>
+      <line x1="687.3" y1="526.7" x2="708.4" y2="574.4" stroke="#aab6bd" stroke-width="8.0" stroke-linecap="round" opacity="1"/>
+      <line x1="687.3" y1="525.1" x2="708.4" y2="572.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity="0.6"/>
+      <polygon points="679.0,518.6 826.8,518.6 908.1,586.2 707.3,586.2" fill="#fff6dc" opacity=".18" filter="url(#b3)"/>
+      </g>
+      <g id="ivTube"><path d="M539.2 398.4C539.2 488.4 632.5 615.5 707.5 560.5" stroke="#7f9fb2" stroke-width="4.4" fill="none" stroke-linecap="round"/><path d="M539.2 398.4C539.2 488.4 632.5 615.5 707.5 560.5" stroke="#e3f1f8" stroke-width="2.4" fill="none" stroke-linecap="round"/><rect x="534.7" y="432.4" width="9" height="15" rx="2.5" fill="#4a90c2" stroke="#2f6a96" stroke-width="1"/><rect x="699.5" y="557.5" width="14" height="6" rx="2" fill="#fff" stroke="#b9c6cd" stroke-width="1"/><rect x="701.5" y="559.5" width="16" height="5" rx="1.5" fill="#f2e2b8" opacity=".95" transform="rotate(-18 707.5 560.5)"/></g>
+
+    <!-- grading: warm light, top scrim, vignette, film grain -->
+    <rect width="1600" height="900" fill="#ffe6bd" opacity=".07" style="mix-blend-mode:soft-light;pointer-events:none"/>
+    <rect width="1600" height="320" fill="url(#scrim)" style="pointer-events:none"/>
+    <rect width="1600" height="900" fill="url(#vig)" style="pointer-events:none"/>
+    <rect x="-200" y="-500" width="2000" height="2020" filter="url(#grain)" opacity=".22" style="pointer-events:none"/>
+    <rect x="-200" y="-500" width="2000" height="500" fill="#0a1418" opacity=".55" style="pointer-events:none"/>
+  </svg>
+
+  <div class="content">
+    <h1 id="cTitle"></h1>
+    <p class="hint" id="hint">A letter is waiting on the bedside table. Tap it to open.</p>
+    <div class="note" id="note" hidden></div>
+    <p class="more" id="more">keep scrolling</p>
+    <section id="wall" aria-label="Photos">
+      <h2>Our little memory line</h2>
+      <div id="lines"></div>
+      <div class="wishwrap">
+        <button type="button" id="heartBtn" class="heart" aria-label="Make a wish">
+          <svg viewBox="0 0 24 24" width="44" height="44" aria-hidden="true"><path d="M12 21.2l-1.4-1.3C5.4 15.2 2 12.1 2 8.3 2 5.2 4.4 3 7.4 3c1.7 0 3.4.8 4.6 2.1C13.2 3.8 14.9 3 16.6 3 19.6 3 22 5.2 22 8.3c0 3.8-3.4 6.9-8.6 11.6L12 21.2z"/></svg>
+        </button>
+        <p class="wishcap">Tap the heart to make a wish</p>
+      </div>
+      <p class="sign" id="sign"></p>
+    </section>
+  </div>
+</main>
+
+<div id="wishModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="wishTitle">
+  <div class="modal-card">
+    <button type="button" class="x" id="wishClose" aria-label="Close">&times;</button>
+    <div id="wishAsk">
+      <h3 id="wishTitle">Make a wish</h3>
+      <p>What is the one wish you want this year?</p>
+      <form id="wishForm">
+        <textarea id="wishText" maxlength="500" rows="4" required placeholder="Type your wish here..."></textarea>
+        <button type="submit" id="wishSend">Send my wish</button>
+      </form>
+      <p id="wishMsg" role="status"></p>
+    </div>
+    <div id="wishDone" hidden>
+      <h3>Your wish is on its way</h3>
+      <p>It has been sent. Keep it close, and keep smiling.</p>
+      <button type="button" class="ok" id="wishOk">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= EDIT THIS PART ================= */
+const CONFIG = {
+  name: "Her Name",
+  /* Your Gmail: her wish is sent here. Replace it with your real address. */
+  notifyEmail: "YOUR_GMAIL@gmail.com",
+  message: [
+    "Dear Her Name,",
+    "You threaded that needle without touching a single edge, which is exactly the steady-hands energy I expected from you.",
+    "Thank you for every laugh, every random chat and for being the kind of person people feel lucky to know.",
+    "I hope this year is full of good food, good people and exactly the kind of chaos you enjoy.",
+    "Happy birthday!"
+  ],
+  /* Put your photos in a folder called "photos" next to index.html */
+  photos: [
+    { src: "photos/1.jpg", caption: "Remember this?" },
+    { src: "photos/2.jpg", caption: "Pure joy" },
+    { src: "photos/3.jpg", caption: "Chaos mode" },
+    { src: "photos/4.jpg", caption: "Best day" },
+    { src: "photos/5.jpg", caption: "Us, always" },
+    { src: "photos/6.jpg", caption: "More to come" }
+  ],
+  signoff: "Happy birthday, Her Name!"
+};
+/* ================================================== */
+
+const $ = s => document.querySelector(s);
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+document.title = "Happy birthday, " + CONFIG.name + "!";
+$("#gTitle").textContent = "Hey " + CONFIG.name + "!";
+
+/* ---------- sound ---------- */
+let ac;
+function beep(freq, dur, type){
+  try{
+    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.07, ac.currentTime); g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + dur);
+    o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime + dur);
+  }catch(e){}
+}
+
+/* ---------- game: steady hands ---------- */
+const board = $("#board"), lane = $("#lane"), needle = $("#needle"), thread = $("#thread"), flash = $("#flash"), msg = $("#msg");
+const START = { x: 60, y: 60 }, END = { x: 310, y: 440 };
+const total = lane.getTotalLength(), STEP = 3, N = Math.ceil(total / STEP);
+const pts = Array.from({ length: N + 1 }, (_, i) => lane.getPointAtLength(Math.min(total, i * STEP)));
+const FAIL = [
+  "BZZT! You touched the edge. The patient says ouch.",
+  "Steady hands, doctor. This is not your morning coffee.",
+  "Attempt three. The patient is asking for a second opinion.",
+  "Breathe in. Breathe out. Blame the phone, not yourself.",
+  "The cake has filed a formal complaint.",
+  "Okay, even the cake is rooting for you now."
+];
+let active = false, done = false, prog = 0, attempts = 0, trail = [];
+const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+function toSvg(e){ const p = board.createSVGPoint(); p.x = e.clientX; p.y = e.clientY; return p.matrixTransform(board.getScreenCTM().inverse()); }
+function place(p){ needle.setAttribute("transform", "translate(" + p.x.toFixed(1) + " " + p.y.toFixed(1) + ")"); }
+function reset(){ active = false; prog = 0; trail = []; thread.setAttribute("points", ""); place(START); }
+
+board.addEventListener("pointerdown", e => {
+  if (done || active) return;
+  const p = toSvg(e);
+  if (dist(p, START) > 32){ msg.textContent = "Start at the START marker, doctor."; return; }
+  active = true; prog = 0; trail = [START]; board.setPointerCapture(e.pointerId); place(START);
+  msg.textContent = "Steady... steady...";
+});
+board.addEventListener("pointermove", e => {
+  if (!active || done) return;
+  const p = toSvg(e);
+  if (!lane.isPointInStroke(new DOMPoint(p.x, p.y))) return fail();
+  let best = prog, bd = 1e9;
+  for (let i = Math.max(0, prog - 10); i <= Math.min(N, prog + 70); i++){ const d = dist(p, pts[i]); if (d < bd){ bd = d; best = i; } }
+  prog = Math.max(prog, best);
+  place(p);
+  const last = trail[trail.length - 1];
+  if (dist(p, last) > 3){ trail.push({ x: +p.x.toFixed(1), y: +p.y.toFixed(1) }); thread.setAttribute("points", trail.map(t => t.x + "," + t.y).join(" ")); }
+  if (prog >= N - 8 && dist(p, END) < 30) win();
+});
+const lift = () => { if (active && !done){ reset(); msg.textContent = "Lifted early. The needle goes back to the start."; } };
+board.addEventListener("pointerup", lift);
+board.addEventListener("pointercancel", lift);
+
+function fail(){
+  attempts++; $("#att").textContent = attempts;
+  msg.textContent = FAIL[Math.min(attempts - 1, FAIL.length - 1)];
+  flash.classList.add("on"); requestAnimationFrame(() => requestAnimationFrame(() => flash.classList.remove("on")));
+  beep(140, 0.35, "sawtooth"); reset();
+  if (attempts >= 6) $("#skip").hidden = false;
+}
+function win(){
+  done = true; active = false; place(END);
+  msg.textContent = "Perfect stitch! The patient is stable and the cake is intact.";
+  beep(660, 0.18, "triangle"); setTimeout(() => beep(880, 0.3, "triangle"), 160);
+  confetti(); setTimeout(showCard, 2400);
+}
+$("#skip").onclick = () => { if (done) return; done = true; msg.textContent = "Fine. Surgery cancelled, birthday approved."; setTimeout(showCard, 1200); };
+
+function confetti(){
+  if (reduce) return;
+  const cols = ["#c9a7ff","#9b6bff","#ff9ed2","#ffd86b","#6fd3ff"];
+  for (let i = 0; i < 70; i++){
+    const b = document.createElement("i"); b.className = "bit";
+    b.style.left = Math.random() * 100 + "vw"; b.style.background = cols[i % cols.length];
+    b.style.setProperty("--dx", (Math.random() * 160 - 80) + "px");
+    b.style.animationDelay = Math.random() * .8 + "s";
+    document.body.append(b); setTimeout(() => b.remove(), 5000);
+  }
+}
+
+/* ---------- page 2: the ward ---------- */
+/* ---------- fit the scene to the screen (phones get a tall crop of the nurse, bed and table) ---------- */
+function fitScene(){
+  const sc = $("#scene"), W = innerWidth, H = innerHeight;
+  if (W / H < 0.9){
+    const w = 740, h = w * H / W;
+    sc.setAttribute("viewBox", "360 " + (470 - h / 2).toFixed(0) + " " + w + " " + h.toFixed(0));
+    sc.setAttribute("preserveAspectRatio", "xMidYMid meet");
+  } else {
+    sc.setAttribute("viewBox", "0 0 1600 900");
+    sc.setAttribute("preserveAspectRatio", "xMidYMid slice");
+  }
+}
+addEventListener("resize", fitScene); fitScene();
+
+let opened = false;
+function showCard(){
+  const g = $("#game"); g.classList.add("leaving");
+  setTimeout(() => {
+    g.hidden = true;
+    const c = $("#card"); c.hidden = false; scrollTo(0, 0);
+    requestAnimationFrame(() => c.classList.add("in"));
+    $("#cTitle").textContent = "Happy birthday, " + CONFIG.name + "!";
+    $("#mname").textContent = "PT: " + CONFIG.name.toUpperCase();
+    const nn = $("#nurseName"); nn.textContent = CONFIG.name; fitScene();
+    try{ const w = nn.getComputedTextLength(); if (w > 138) nn.setAttribute("font-size", (22 * 138 / w).toFixed(1)); }catch(e){}
+    startVitals();
+    const note = $("#note");
+    CONFIG.message.forEach(t => { const p = document.createElement("p"); p.textContent = t; note.append(p); });
+    const letter = $("#letter");
+    letter.onclick = openLetter;
+    letter.onkeydown = e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openLetter(); } };
+  }, reduce ? 0 : 800);
+}
+
+function openLetter(){
+  if (opened) return; opened = true;
+  $("#letter").classList.add("taken"); $("#scene").classList.add("dim"); $("#hint").hidden = true;
+  const note = $("#note"); note.hidden = false;
+  const ps = [...note.children], gap = reduce ? 0 : 1700;
+  ps.forEach((p, i) => setTimeout(() => p.classList.add("on"), 500 + i * gap));
+  setTimeout(() => { buildWall(); $("#more").classList.add("on"); }, 500 + ps.length * gap);
+}
+
+function startVitals(){
+  if (reduce) return;
+  const r = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  setInterval(() => {
+    const sys = r(116, 123), dia = r(77, 82);
+    $("#sys").textContent = sys; $("#dia").textContent = dia;
+    $("#map").textContent = Math.round((sys + 2 * dia) / 3); $("#pul").textContent = r(70, 75);
+  }, 1800);
+}
+
+function buildWall(){
+  const lines = $("#lines");
+  for (let n = 0; n < CONFIG.photos.length; n += 3){
+    const row = document.createElement("div"); row.className = "line";
+    CONFIG.photos.slice(n, n + 3).forEach((p, k) => {
+      const f = document.createElement("figure"); f.className = "ph";
+      f.style.setProperty("--r", [-2.5, 1.8, -1.2, 2.4][(n + k) % 4] + "deg");
+      f.style.setProperty("--d", (-(n + k) * 0.9) + "s");
+      const img = document.createElement("img");
+      img.src = p.src; img.alt = p.caption || "Photo"; img.loading = "lazy";
+      img.onerror = () => img.removeAttribute("src");
+      const cap = document.createElement("figcaption"); cap.textContent = p.caption || "";
+      f.append(img, cap); row.append(f);
+    });
+    lines.append(row);
+  }
+  $("#sign").textContent = CONFIG.signoff;
+  requestAnimationFrame(() => $("#wall").classList.add("on"));
+}
+
+/* ---------- wall clock: shows the viewer's real local time ---------- */
+(function(){
+  const NS = "http://www.w3.org/2000/svg", g = $("#clk"), CX = 860, CY = 150;
+  const mk = (tag, at, parent) => { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); (parent || g).append(e); return e; };
+  for (let i = 0; i < 60; i++){
+    const a = i * Math.PI / 30, big = i % 5 === 0, r1 = 43, r2 = big ? 36 : 39.5;
+    mk("line", { x1: CX + Math.sin(a) * r1, y1: CY - Math.cos(a) * r1, x2: CX + Math.sin(a) * r2, y2: CY - Math.cos(a) * r2,
+      stroke: big ? "#222" : "#777", "stroke-width": big ? 2.2 : 1, "stroke-linecap": "round" });
+  }
+  for (let n = 1; n <= 12; n++){
+    const a = n * Math.PI / 6;
+    mk("text", { x: CX + Math.sin(a) * 28.5, y: CY - Math.cos(a) * 28.5, "text-anchor": "middle", "dominant-baseline": "central",
+      "font-family": "Quicksand,Arial,sans-serif", "font-size": 10, "font-weight": 700, fill: "#222" }).textContent = n;
+  }
+  const hh = mk("g", {}), mm = mk("g", {}), ss = mk("g", {});
+  mk("line", { x1: CX, y1: CY + 4, x2: CX, y2: CY - 19, stroke: "#222", "stroke-width": 4.2, "stroke-linecap": "round" }, hh);
+  mk("line", { x1: CX, y1: CY + 5, x2: CX, y2: CY - 30, stroke: "#222", "stroke-width": 2.8, "stroke-linecap": "round" }, mm);
+  mk("line", { x1: CX, y1: CY + 9, x2: CX, y2: CY - 35, stroke: "#d63a4a", "stroke-width": 1.4, "stroke-linecap": "round" }, ss);
+  mk("circle", { cx: CX, cy: CY, r: 3.4, fill: "#d63a4a" });
+  mk("circle", { cx: CX, cy: CY, r: 1.2, fill: "#222" });
+  const rot = (e, deg) => e.setAttribute("transform", "rotate(" + deg.toFixed(2) + " " + CX + " " + CY + ")");
+  function tick(){
+    const d = new Date(), s = d.getSeconds(), m = d.getMinutes() + s / 60, h = (d.getHours() % 12) + m / 60;
+    rot(hh, h * 30); rot(mm, m * 6); rot(ss, s * 6);
+  }
+  tick(); setInterval(tick, 1000);
+})();
+
+/* ---------- heart button: she types one wish and it is emailed to you ---------- */
+(function(){
+  const btn = $("#heartBtn"), modal = $("#wishModal"), form = $("#wishForm"), txt = $("#wishText"),
+        msg = $("#wishMsg"), send = $("#wishSend"), ask = $("#wishAsk"), done = $("#wishDone");
+  const open = () => { modal.hidden = false; msg.textContent = ""; setTimeout(() => txt.focus(), 60); };
+  const close = () => { modal.hidden = true; };
+  btn.addEventListener("click", open);
+  $("#wishClose").addEventListener("click", close); $("#wishOk").addEventListener("click", close);
+  modal.addEventListener("click", e => { if (e.target === modal) close(); });
+  addEventListener("keydown", e => { if (e.key === "Escape" && !modal.hidden) close(); });
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const wish = txt.value.trim(); if (!wish) return;
+    send.disabled = true; send.textContent = "Sending..."; msg.textContent = "";
+    try {
+      const to = CONFIG.notifyEmail;
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(to) || /YOUR_GMAIL/i.test(to)) throw new Error("Wish sending is not set up yet.");
+      const r = await fetch("https://formsubmit.co/ajax/" + encodeURIComponent(to), {
+        method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ name: CONFIG.name, wish: wish, _subject: "A birthday wish from " + CONFIG.name, _template: "box", _captcha: "false" })
+      });
+      const j = await r.json();
+      if (!r.ok || String(j.success) !== "true") throw new Error("Could not send. Please try again.");
+      ask.hidden = true; done.hidden = false; btn.classList.add("sent"); txt.value = "";
+    } catch (err) {
+      msg.textContent = err.message && err.message.length < 60 ? err.message : "Could not send. Please try again.";
+    } finally { send.disabled = false; send.textContent = "Send my wish"; }
+  });
+})();
+
+place(START);
+</script>
+</body>
+</html>
